@@ -1,0 +1,81 @@
+{% extends "macro/order_index.html" %}
+
+{% block content1 %}
+    <div class="container-fluid">
+        <div class="input-group input-group-sm">&nbsp&nbsp
+            <span class="input-group-addon">거래처명</span>&nbsp
+            <input type="text" id="company1" placeholder="company">&nbsp&nbsp
+            <span class="input-group-addon">프로젝트</span>&nbsp
+            <input type="text" id="project" placeholder="Project">&nbsp&nbsp
+            <span class="input-group-addon">작업번호</span>&nbsp
+            <input type="text" id="workpackage" placeholder="WorkPackage">&nbsp&nbsp
+            <span class="input-group-addon">피스번호</span>&nbsp
+            <input type="text" id="workpiece" placeholder="WorkPiece">&nbsp&nbsp
+            <span class="input-group-addon">부재번호</span>&nbsp
+            <input type="text" id="material_id"  placeholder="Material_id">&nbsp&nbsp
+        </div><br>
+        <div><canvas id="angle" width="2500" height="150" style="border:1px solid red">
+        지원하지 않은 브라우져 입니다.</canvas></div><br>
+    </div> 
+{% endblock %}
+{% block content2 %}
+    <div class="col-md-2">
+        <div class="input-group input-group-sm">
+            <button type="button" class="btn btn-secondly">
+                가공정보등록 <span class="badge badge-light">Cutting New</span>
+            </button>
+        </div><br>
+        <form action="" method="post">
+            {% csrf_token %}
+            <table class="table table-borderde">                
+                {{ cutting_new.as_table }}
+            </table>
+            <input type="submit" value="저장하기" class="btn btn-primary" /> 
+        </form> 
+    </div>                      
+{% endblock %}
+{% block content3 %} 
+        <div class="col-md-5"> 
+            <div class="input-group input-group-sm">
+                <a href="{% url "macro:cuttings" %}">
+                <button type="button" class="btn btn-info">가공정보                        
+                <span class="badge badge-light">Cutting List</span>
+                </button></a>&nbsp&nbsp&nbsp&nbsp
+                <a href="{% url "macro:canvas_ajax" %}">
+                <button type="button" class="btn btn-primary">그리기                        
+                <span class="badge badge-light">Drawing</span>
+                </button></a>&nbsp&nbsp&nbsp&nbsp
+            </div><br>
+            <div class="table-responsive">
+                <table id="order_table" class="table table-striped">   
+                    <thead>
+                        <tr class="table-dark">
+                            <th>NO</th>
+                            <th>가공영역</th>
+                            <th>가공명</th>
+                            <th>가공코드</th>
+                            <th>가공위치</th>
+                            <th>가공높이</th>
+                            <th>삭제</th>
+                        </tr>
+                    </thead>                
+                    <tbody>
+                        {% for cutting in cutting_list %}                            
+                        <tr class="table-white">     
+                            <td><a href="{% url "macro:cuttings_edit" cutting.pk %}">
+                            {{ cutting.material }}</a></td>                            
+                            <td>{{ cutting.area }}</td>                          
+                            <td>{{ cutting.macro_name }}</td>
+                            <td>{{ cutting.macro_code }}</td>
+                            <td>{{ cutting.distance }}</td>                                                               
+                            <td>{{ cutting.height }}</td>
+                            <td><a id="cutting_delete" href="{% url "macro:cuttings_delete" cutting.pk %}">
+                            <input type="button" value="삭제" /></a></td>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>          
+                </table>  
+            </div>
+        </div> 
+        {% endblock %}

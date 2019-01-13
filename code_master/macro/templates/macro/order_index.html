@@ -1,0 +1,122 @@
+{% extends "macro/layout.html" %}
+
+{% block content %}
+<main role="main">
+<br><br><br>
+    {% block content1 %}
+    {% endblock %}     
+<div class="container-fluid">
+    <div class="row"> 
+        {% block content2 %}
+        {% endblock %}  
+        {% block content3 %} 
+        <div class="col-md-5"> 
+            <div class="input-group input-group-sm">
+                <a href="{% url "macro:orders" %}">
+                <button type="button" class="btn btn-info">피스정보                        
+                <span class="badge badge-light">{{pk}}</span>
+                </button></a>&nbsp&nbsp&nbsp&nbsp
+                <form action="{% url "macro:materials" %}" method="GET">
+                    <input type="text" placeholder="project" name="q1" value="{{q1}}"/>
+                    <input type="text" placeholder="workpackage" name="q2" value="{{q2}}"/>
+                    <input type="text" placeholder="workpiece" name="q3" value="{{q3}}"/>
+                    <input type="submit" value="search" />&nbsp&nbsp&nbsp&nbsp                    
+                </form>&nbsp&nbsp
+            </div><br>
+            <div class="table-responsive">
+                <table id="order_table" class="table table-striped">   
+                    <thead>
+                        <tr class="table-dark">
+                            <th>NO</th>
+                            <th>발주처</th>
+                            <th>프로젝트</th>
+                            <th>작업NO</th>
+                            <th>피스NO</th>
+                            <th>수량</th>
+                            <th>삭제</th>
+                            <th>등록</th>
+                        </tr>
+                    </thead>                
+                    <tbody>
+                        {% for order in order_list %}                            
+                        <tr class="table-white">     
+                            <td><a href="{% url "macro:orders_edit" order.pk %}">
+                            {{ order.id }}</a></td>                           
+                            <td>{{ order.company }}</td>
+                            <td>{{ order.project }}</td>
+                            <td>{{ order.workpackage }}</td>                                                               
+                            <td>{{ order.workpiece }}</td>
+                            <td>{{ order.quantity }}</td>
+                            <td><a id="order_delete" href="{% url "macro:orders_delete" order.pk %}">
+                            <input type="button" value="삭제" /></a></td>
+                            <td><form action="{% url "macro:materials" %}" method="GET">
+                            <input type="hidden" name="pk" value="{{order.pk}}"/>
+                            <input type="submit" onclick="material_add()" value="등록" /></form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>          
+                </table>  
+            </div>
+        </div> 
+        {% endblock %}
+        {% block content4 %}
+        <div class="col-md-5">       
+            <div class="input-group input-group-sm">
+                <a href="{% url "macro:materials" %}"> 
+                <button type="button" class="btn btn-info">
+                부재정보 <span class="badge badge-light">{{pk}}</span>
+                </button></a>&nbsp&nbsp&nbsp&nbsp
+                <form action="{% url "macro:cuttings" %}" method="GET">
+                    <input type="text" placeholder="number" name="qm1" value="{{qm1}}"/>
+                    <input type="text" placeholder="kind" name="qm2" value="{{qm2}}"/>
+                    <input type="text" placeholder="standards" name="qm3" value="{{qm3}}"/>
+                    <input type="submit" value="search" />&nbsp&nbsp&nbsp&nbsp                    
+                </form>&nbsp&nbsp               
+            </div><br>
+            <div class="table-responsive">
+                <table class="table table-striped"> 
+                    <thead>
+                        <tr class="table-dark">
+                            <th>NO</th>
+                            <th>부재번호</th>
+                            <th>자재종류</th>
+                            <th>자재규격</th>
+                            <th>자재길이</th>
+                            <th>자재재질</th>
+                            <th>수량</th> 
+                            <th>삭제</th> 
+                            <th>등록</th>              
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for material in material_list %}
+                        <tr class="table-white">
+                            <td><a href="{% url "macro:materials_edit" material.pk %}">
+                            {{ material.id }}</td>
+                            <td>{{ material.number }}</a></td>
+                            <td>{{ material.kind }}</td>
+                            <td>{{ material.standards }}</td>
+                            <td>{{ material.length }}</td>
+                            <td>{{ material.texture }}</td>
+                            <td>{{ material.quantity }}</td> 
+                            <td><a href="{% url "macro:materials_delete" material.pk %}">                            
+                            <input type="button" value="삭제" /></a></td>
+                            <td><form action="{% url "macro:cuttings" %}" method="GET">
+                            <input type="hidden" name="pk" value="{{material.pk}}"/>
+                            <input type="submit" onclick="cutting_add()" value="등록" /></form>
+                            </td>
+                        </tr>            
+                        {% endfor %}     
+                    </tbody>  
+                </table> 
+            </div> 
+        </div> 
+        {% endblock %}
+    </div>
+</div>
+</main> 
+
+{% endblock %}
+
+
